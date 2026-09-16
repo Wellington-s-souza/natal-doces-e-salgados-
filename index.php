@@ -1,4 +1,5 @@
 <?php include 'conexao.php'; ?>
+<?php include 'config.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -61,6 +62,35 @@
     </div>
   </div>
 </section>
+  <h2 class="container section-title titulo-h2" data-aos="fade-down">Novidades</h2>
+<div class="slideshow-container" data-aos="fade-down">
+  <?php
+  // Busca as imagens ordenadas pela coluna "ordem"
+  $sqlNovidades = "SELECT * FROM novidades ORDER BY ordem ASC";
+  $resultadoNovidades = mysqli_query($conexao, $sqlNovidades);
+  $totalNovidades = mysqli_num_rows($resultadoNovidades); // Conta quantas imagens existem
+  $contador = 1; // Usado para mostrar "1 / 3", "2 / 3" etc.
+
+  while ($novidade = mysqli_fetch_assoc($resultadoNovidades)) {
+    echo '
+    <div class="mySlides fade">
+      <div class="numbertext">' . $contador . ' / ' . $totalNovidades . '</div>
+      <img src="img/' . htmlspecialchars($novidade['imagem']) . '">
+      <p class="slide-legenda">' . htmlspecialchars($novidade['legenda']). '</p>
+      </div>';
+    $contador++;
+  }
+  ?>
+</div>
+<br>
+<div style="text-align:center" data-aos="fade-down">
+  <?php
+  // Cria um "dot" (bolinha) para cada imagem, dinamicamente
+  for ($i = 0; $i < $totalNovidades; $i++) {
+    echo '<span class="dot" onclick="currentSlide(' . ($i + 1) . ')"></span> ';
+  }
+  ?>
+</div>
 <section class="cardapio" id="cardapio">
   <div class="container">
     <h2 class="section-title" data-aos="fade-down">Nosso Cardápio</h2>
@@ -78,7 +108,7 @@
         <img src="img/' . htmlspecialchars($produto['imagem']) . '" alt="' . htmlspecialchars($produto['nome']) . '">
         <h3>' . htmlspecialchars($produto['nome']). '</h3>
         <p>' . htmlspecialchars($produto['descricao']) . '</p>
-        <a href="https://wa.me/5500000000000?text=' . $mensagem . '" class="btn-pedido" target="_blank">
+        <a href="https://wa.me/' . WHATSAPP_NUMERO . '?text=' . $mensagem . '" class="btn-pedido" target="_blank">
           <i class="fab fa-whatsapp"></i> Peça no WhatsApp
         </a>
     </div>';
@@ -99,7 +129,7 @@ while ($produto = mysqli_fetch_assoc($resultadoSalgados)){
         <img src="img/' . htmlspecialchars($produto['imagem']). '"alt="' . htmlspecialchars($produto['nome']). '">
         <h3>' . htmlspecialchars($produto['nome']). '</h3>
         <p>' . htmlspecialchars($produto['descricao']). '</p>
-        <a href="https://wa.me/5500000000000?text=' . $mensagem . '" class="btn-pedido" target="_blank">
+        <a href="https://wa.me/' . WHATSAPP_NUMERO . '?text=' . $mensagem . '" class="btn-pedido" target="_blank">
           <i class="fab fa-whatsapp"></i> Peça no WhatsApp
         </a>
     </div>';
@@ -128,7 +158,7 @@ while ($produto = mysqli_fetch_assoc($resultadoSalgados)){
     <h2 class="section-title" data-aos="fade-up">Fale Conosco</h2>
     <p data-aos="fade-up" data-aos-delay="100">Faça seu pedido ou tire suas dúvidas pelo WhatsApp</p>
 
-    <a href="https://wa.me/5500000000000" class="btn btn-whatsapp" target="_blank" data-aos="zoom-in" data-aos-delay="200">
+    <a href="https://wa.me/<?php echo WHATSAPP_NUMERO; ?>" class="btn btn-whatsapp" target="_blank" data-aos="zoom-in" data-aos-delay="200">
   <i class="fab fa-whatsapp"></i> Chamar no WhatsApp
    </a>
 
