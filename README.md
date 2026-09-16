@@ -4,7 +4,7 @@ Site funcional para confeitaria, com cardápio dinâmico integrado a banco de da
 
 ## 🔗 Demonstração
 
-*(adicionar link aqui quando o site estiver publicado online)* k
+*(adicionar link aqui quando o site estiver publicado online)* 
 
 ## 🛠️ Tecnologias utilizadas
 
