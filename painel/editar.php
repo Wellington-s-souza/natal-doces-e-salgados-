@@ -1,5 +1,6 @@
 <?php
 include 'verifica_sessao.php';
+/** @var mysqli $conexao */
 include '../conexao.php';
 
 // Verifica se veio um id pela URL (ex: editar.php?id=3)

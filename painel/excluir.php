@@ -1,6 +1,7 @@
 <?php
 // Sempre confere login antes de qualquer ação no admin
 include 'verifica_sessao.php';
+/** @var mysqli $conexao */
 include '../conexao.php';
 
 // Verifica se o parâmetro 'id' foi realmente enviado pela URL

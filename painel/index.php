@@ -1,6 +1,7 @@
 <?php
 // Primeira linha: verifica se está logado (redireciona se não estiver)
 include 'verifica_sessao.php';
+/** @var mysqli $conexao */
 
 // Conexão com o banco (o "../" porque estamos dentro da pasta admin/)
 include '../conexao.php';
