@@ -1,5 +1,6 @@
 <?php
 include 'verifica_sessao.php';
+/** @var mysqli $conexao */
 include '../conexao.php';
 
 if (isset($_GET['id'])) {
