@@ -6,6 +6,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Natal Doces e Salgados</title>
+  <meta name="description" content="Natal Doces e Salgados - Confeitaria artesanal desde 2012. Bolos, pães, salgados e muito mais, feitos com tradição e carinho. Faça seu pedido pelo WhatsApp!">
+  <meta name="keywords" content="confeitaria, doces, salgados, bolos, pão de queijo, encomendas, São Paulo">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Natal Doces e Salgados">
+  <meta property="og:description" content="Confeitaria artesanal desde 2012. Bolos, pães e salgados feitos com tradição. Peça já pelo WhatsApp!">
+  <!--<meta property="og:image" content="https://SEUSITE.com/img/logo.png"> -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
   <link rel="icon" type="image/x-icon" href="img/logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,8 +70,8 @@
     </div>
   </div>
 </section>
-  <h2 class="container section-title titulo-h2" data-aos="fade-down">Novidades</h2>
-<div class="slideshow-container" data-aos="fade-down">
+<h2 class="container section-title titulo-h2" data-aos="fade-up">Novidades</h2>
+<div class="slideshow-container" data-aos="fade-up">
   <?php
   // Busca as imagens ordenadas pela coluna "ordem"
   $sqlNovidades = "SELECT * FROM novidades ORDER BY ordem ASC";
@@ -83,7 +91,7 @@
   ?>
 </div>
 <br>
-<div style="text-align:center" data-aos="fade-down">
+<div style="text-align:center" data-aos="fade-up">
   <?php
   // Cria um "dot" (bolinha) para cada imagem, dinamicamente
   for ($i = 0; $i < $totalNovidades; $i++) {
@@ -175,7 +183,7 @@ while ($produto = mysqli_fetch_assoc($resultadoSalgados)){
   </iframe>
 </div>
       <p>📍 R. dos Pargos, 27 - Jardim Celia (Zona Sul), São Paulo - SP, 04475-190, Brasil</p>
-      <p>🕒 Seg a Sáb, 8h às 18h</p>
+      <p>🕒 Ter a Sex, 8h às 18:30h<br> Sáb, 8h às 16h <br>Dom, 8h às 14:30h</p>
     </div>
 
     <div class="redes-sociais" data-aos="fade-up" data-aos-delay="400">

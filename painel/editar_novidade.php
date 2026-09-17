@@ -61,6 +61,7 @@ if (!$novidade) {
 <head>
   <meta charset="UTF-8">
   <title>Editar Novidade</title>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>

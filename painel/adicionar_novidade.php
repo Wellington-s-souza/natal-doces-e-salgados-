@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <title>Adicionar Novidade</title>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>

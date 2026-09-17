@@ -1,60 +1,84 @@
 <?php
-// Inicia (ou retoma) a sessão do usuário.
-// Precisa vir ANTES de qualquer HTML ser enviado ao navegador.
+date_default_timezone_set('America/Sao_Paulo');
 session_start();
-
-// Traz a variável $conexao já configurada nesse arquivo
 include 'conexao.php';
 
-
-
-// Variável que vai guardar uma mensagem de erro, caso o login falhe
 $erro = "";
+// Pega o IP de quem está acessando
+$ip = $_SERVER['REMOTE_ADDR'];
+$agora = date('Y-m-d H:i:s');
 
-// Verifica se essa página foi acessada por um envio de formulário (POST)
-// ou só por uma visita normal (GET, quando o navegador só carrega a página)
+// Configurações do rate limiting
+$maxTentativas = 5;      // Quantas tentativas erradas permitir
+$tempoBloqueio = 300;    // Tempo de bloqueio em segundos (300 = 5 minutos)
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-  // Pega os valores digitados nos campos do formulário
-  // ($_POST é um array que guarda tudo que foi enviado pelo <form method="POST">)
-  $usuario = $_POST['usuario'];
-  $senhaDigitada = $_POST['senha'];
-
-  // Monta a consulta SQL com um "?" no lugar do valor real (placeholder)
-  // Isso evita SQL Injection: o valor nunca é colado direto no comando
-  $sql = "SELECT * FROM usuarios WHERE usuario = ?";
-
-  // Prepara a consulta (deixa ela "pronta pra usar", mas ainda sem o valor)
-  $stmt = mysqli_prepare($conexao, $sql);
-
-  // Substitui o "?" pelo valor de $usuario
-  // "s" significa que o valor é do tipo "string" (texto)
-  mysqli_stmt_bind_param($stmt, "s", $usuario);
-
-  // Executa a consulta de fato no banco
+  // PASSO 1: Verifica se esse IP já está bloqueado
+  $sqlVerifica = "SELECT * FROM tentativas_login WHERE ip = ?";
+  $stmt = mysqli_prepare($conexao, $sqlVerifica);
+  mysqli_stmt_bind_param($stmt, "s", $ip);
   mysqli_stmt_execute($stmt);
-
-  // Pega o resultado da consulta
   $resultado = mysqli_stmt_get_result($stmt);
+  $registro = mysqli_fetch_assoc($resultado);
 
-  // Pega a primeira (e única, já que "usuario" é UNIQUE) linha encontrada
-  $usuarioEncontrado = mysqli_fetch_assoc($resultado);
+  $bloqueado = false;
 
-  // Verifica duas coisas ao mesmo tempo:
-  // 1) Se encontrou algum usuário com esse nome ($usuarioEncontrado não é vazio)
-  // 2) Se a senha digitada bate com o hash salvo no banco
-  if ($usuarioEncontrado && password_verify($senhaDigitada, $usuarioEncontrado['senha'])) {
+  if ($registro && $registro['tentativas'] >= $maxTentativas) {
+    // Calcula quanto tempo passou desde a última tentativa
+    $tempoDecorrido = time() - strtotime($registro['ultima_tentativa']);
 
-    // Login certo! Grava na sessão que esse usuário está autenticado
-    $_SESSION['logado'] = true;
-    $_SESSION['usuario'] = $usuarioEncontrado['usuario'];
+    if ($tempoDecorrido < $tempoBloqueio) {
+      $bloqueado = true;
+      $minutosRestantes = ceil(($tempoBloqueio - $tempoDecorrido) / 60);
+      $erro = "Muitas tentativas erradas. Tente novamente em {$minutosRestantes} minuto(s).";
+    } else {
+      // Já passou o tempo de bloqueio, reseta o contador
+      $sqlReset = "UPDATE tentativas_login SET tentativas = 0 WHERE ip = ?";
+      $stmt = mysqli_prepare($conexao, $sqlReset);
+      mysqli_stmt_bind_param($stmt, "s", $ip);
+      mysqli_stmt_execute($stmt);
+    }
+  }
 
-    // Redireciona para a página principal do painel administrativo
-    header("Location: admin/index.php");
-    exit; // Para a execução do script aqui, por segurança
-  } else {
-    // Login errado: guarda uma mensagem pra mostrar na tela
-    $erro = "Usuário ou senha incorretos";
+  // PASSO 2: Se não estiver bloqueado, processa o login normalmente
+  if (!$bloqueado) {
+    $usuario = $_POST['usuario'];
+    $senhaDigitada = $_POST['senha'];
+
+    $sql = "SELECT * FROM usuarios WHERE usuario = ?";
+    $stmt = mysqli_prepare($conexao, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $usuario);
+    mysqli_stmt_execute($stmt);
+    $resultado = mysqli_stmt_get_result($stmt);
+    $usuarioEncontrado = mysqli_fetch_assoc($resultado);
+
+    if ($usuarioEncontrado && password_verify($senhaDigitada, $usuarioEncontrado['senha'])) {
+      // LOGIN CERTO: limpa o registro de tentativas desse IP
+      $sqlLimpa = "DELETE FROM tentativas_login WHERE ip = ?";
+      $stmt = mysqli_prepare($conexao, $sqlLimpa);
+      mysqli_stmt_bind_param($stmt, "s", $ip);
+      mysqli_stmt_execute($stmt);
+
+      $_SESSION['logado'] = true;
+      $_SESSION['usuario'] = $usuarioEncontrado['usuario'];
+      header("Location: painel/index.php");
+      exit;
+    } else {
+      // LOGIN ERRADO: registra ou incrementa a tentativa
+      if ($registro) {
+        $sqlIncrementa = "UPDATE tentativas_login SET tentativas = tentativas + 1, ultima_tentativa = ? WHERE ip = ?";
+        $stmt = mysqli_prepare($conexao, $sqlIncrementa);
+        mysqli_stmt_bind_param($stmt, "ss", $agora, $ip);
+      } else {
+        $sqlInsere = "INSERT INTO tentativas_login (ip, tentativas, ultima_tentativa) VALUES (?, 1, ?)";
+        $stmt = mysqli_prepare($conexao, $sqlInsere);
+        mysqli_stmt_bind_param($stmt, "ss", $ip, $agora);
+      }
+      mysqli_stmt_execute($stmt);
+
+      $erro = "Usuário ou senha incorretos";
+    }
   }
 }
 ?>
@@ -63,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <title>Login - Painel Administrativo</title>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>

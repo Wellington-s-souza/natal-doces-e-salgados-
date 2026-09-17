@@ -86,6 +86,7 @@ if (!$produto) {
 <head>
   <meta charset="UTF-8">
   <title>Editar Produto</title>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>

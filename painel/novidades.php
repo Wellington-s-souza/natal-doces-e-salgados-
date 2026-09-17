@@ -10,6 +10,7 @@ $resultado = mysqli_query($conexao, $sql);
 <head>
   <meta charset="UTF-8">
   <title>Gerenciar Novidades</title>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>

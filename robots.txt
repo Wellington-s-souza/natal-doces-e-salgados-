@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /painel/
+Disallow: /login.php
+Disallow: /conexao.php
+Disallow: /config.php
+
+Sitemap: https://SEUSITE.com/sitemap.xml
