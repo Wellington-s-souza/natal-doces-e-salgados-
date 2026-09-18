@@ -1,28 +1,26 @@
 <?php
-// Lê o arquivo .env e transforma cada linha em uma variável de ambiente
+// Lê o arquivo .env e guarda os valores num array global,
+// em vez de usar putenv()/getenv() (que pode estar desabilitado em hospedagens gratuitas)
 function carregarEnv($caminho) {
   if (!file_exists($caminho)) {
     die("Arquivo .env não encontrado. Copie .env.example para .env e configure.");
   }
 
-  // Lê o arquivo linha por linha, ignorando linhas vazias
   $linhas = file($caminho, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+  $variaveis = [];
 
   foreach ($linhas as $linha) {
-    // Ignora comentários (linhas que começam com #)
     if (strpos(trim($linha), '#') === 0) {
       continue;
     }
 
-    // Separa "CHAVE=valor" em duas partes
     list($chave, $valor) = explode('=', $linha, 2);
-    $chave = trim($chave);
-    $valor = trim($valor);
-
-    // putenv() registra a variável no ambiente do PHP para essa requisição
-    putenv("{$chave}={$valor}");
+    $variaveis[trim($chave)] = trim($valor);
   }
+
+  return $variaveis;
 }
 
-carregarEnv(__DIR__ . '/.env');
+// Guarda o resultado numa variável global, acessível em outros arquivos
+$GLOBALS['env'] = carregarEnv(__DIR__ . '/.env.example');
 ?>

@@ -11,7 +11,8 @@
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Natal Doces e Salgados">
   <meta property="og:description" content="Confeitaria artesanal desde 2012. Bolos, pães e salgados feitos com tradição. Peça já pelo WhatsApp!">
-  <!--<meta property="og:image" content="https://SEUSITE.com/img/logo.png"> -->
+  <meta property="og:image" content="https://nataldocesesalgados.rf.gd/img/logo.png">
+  <meta property="og:url" content="https://nataldocesesalgados.rf.gd">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <link rel="icon" type="image/x-icon" href="img/logo.png">
