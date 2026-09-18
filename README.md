@@ -24,6 +24,7 @@ https://nataldocesesalgados.rf.gd/
 - Animações suaves ao rolar a página
 - Mapa integrado com a localização da loja
 - Design totalmente responsivo
+- Página gerenciamento de Produtos(Crud) - PHP 
 
 ## 🗄️ Estrutura do banco de dados
 
