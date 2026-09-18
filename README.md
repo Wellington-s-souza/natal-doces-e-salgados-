@@ -38,9 +38,6 @@ Tabela `produtos`:
 | imagem | VARCHAR(100) | Nome do arquivo de imagem |
 | destaque | TINYINT(1) | Reservado para produtos em destaque |
 
-## 📸 Prints
-
-*(adicionar 2-3 imagens do site aqui)*
 
 ## 👤 Autor
 
