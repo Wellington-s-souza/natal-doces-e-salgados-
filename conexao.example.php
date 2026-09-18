@@ -1,8 +1,10 @@
 <?php
-$host = "localhost";
-$usuario = "root";
-$senha = "";
-$banco = "loja_confeitaria";
+include 'env.php';
+
+$host = $GLOBALS['env']['DB_HOST'];
+$usuario = $GLOBALS['env']['DB_USER'];
+$senha = $GLOBALS['env']['DB_PASS'];
+$banco = $GLOBALS['env']['DB_NAME'];
 
 $conexao = mysqli_connect($host, $usuario, $senha, $banco);
 
